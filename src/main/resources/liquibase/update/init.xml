@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_user_table" author="hillel" >
+        <createTable tableName="user">
+            <column name = "id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="phone" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="date_of_birth" type="DATE"/>
+            <column name="status" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="hillel_user" id="createTableWallet">
+        <createTable tableName="wallet">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="currency" type="varchar(3)"/>
+            <column name="amount" type="DECIMAL"/>
+            <column name="last_update" type="TIMESTAMP"/>
+            <column name="user_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="alter_table" author="hillel">
+        <sql>
+            ALTER TABLE
+                wallet
+                MODIFY COLUMN
+                currency enum ('UAH', 'USD', 'EUR');
+        </sql>
+    </changeSet>
+
+    <changeSet author="hillel_user" id="createTableNotification">
+        <createTable tableName="notification">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar(50)"/>
+            <column name="content" type="varchar(2048)"/>
+            <column name="user_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="alter_table_notif" author="hillel">
+        <sql>
+            ALTER TABLE
+                notification
+                MODIFY COLUMN
+                type enum ('REGISTRATION','EXCHANGE', 'PUT', 'GET', 'RATE');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_createAt_colund" author="hille_user">
+        <addColumn tableName="notification">
+            <column name="create_at" type="DateTime"/>
+        </addColumn>
+    </changeSet>
+
+     <changeSet id="add_telegram_chat_id" author="hille_user">
+        <addColumn tableName="user">
+            <column name="telegram_chat_id" type="LONG"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="hillel_user" id="createTableTransaction">
+        <createTable tableName="transaction">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="status" type="varchar(50)"/>
+            <column name="currency" type="varchar(3)"/>
+            <column name="amount" type="DECIMAL"/>
+            <column name="type" type="varchar(12)"/>
+            <column name="sender" type="varchar(12)"/>
+            <column name="receiver" type="varchar(12)"/>
+            <column name="comment" type="varchar(1024)"/>
+            <column name="update_at" type="DateTime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="alter_table_transaction" author="hillel">
+        <sql>
+            ALTER TABLE
+                transaction
+                MODIFY COLUMN
+                status enum ('PENDING','EXECUTED','FAILED');
+        </sql>
+        <sql>
+            ALTER TABLE
+                transaction
+                MODIFY COLUMN
+                currency enum ('UAH', 'USD', 'EUR');
+        </sql>
+        <sql>
+            ALTER TABLE
+                transaction
+                MODIFY COLUMN
+                type enum ( 'PUT','GET','EXCH','TRANSF');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add_transaction_code" author="hille_user">
+        <addColumn tableName="transaction">
+            <column name="code" type="varchar(6)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="hillel_user" id="createTableRate">
+        <createTable tableName="rate">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="currency" type="varchar(3)"/>
+            <column name="buy" type="VARCHAR(15)"/>
+            <column name="sale" type="VARCHAR(15)"/>
+            <column name="receive" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="add_ammount_to" author="hille_user">
+        <addColumn tableName="transaction">
+            <column name="currency_to" type="varchar(3)"/>
+            <column name="amount_to" type="DECIMAL"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,5 @@
+FROM openjdk:17
+MAINTAINER Bohdan Hrytsai
+EXPOSE 8080
+COPY target/ExhangerMarket-spring-boot.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]

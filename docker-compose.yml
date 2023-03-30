@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  ex-market:
+    depends_on:
+      - mysqldb
+    command: sh -c './wait-for mysqldb:3306 -- npm start'
+    build:
+      context: .
+      dockerfile: Dockerfile_app
+    ports:
+      - 8080:8080
+    links:
+      - "mysqldb:app_db"
+  mysqldb:
+    build:
+      context: .
+      dockerfile: Dockerfile_mysql
+    ports:
+      - 3306:3306
+    env_file: .env
+    volumes:
+      - myapp:/home/node/app
+volumes:
+  myapp:
