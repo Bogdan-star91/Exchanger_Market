@@ -20,7 +20,7 @@ public class WalletDto {
 
     public static WalletDto fromEntity(Wallet wallet) {
         return WalletDto.builder()
-                .ammount(wallet.getAmmount())
+                .ammount(wallet.getAmount())
                 .currency(wallet.getCurrency())
                 .build();
     }

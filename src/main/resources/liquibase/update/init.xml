@@ -126,7 +126,7 @@
     </changeSet>
 
 
-    <changeSet id="add_ammount_to" author="hille_user">
+    <changeSet id="add_amount_to" author="hille_user">
         <addColumn tableName="transaction">
             <column name="currency_to" type="varchar(3)"/>
             <column name="amount_to" type="DECIMAL"/>

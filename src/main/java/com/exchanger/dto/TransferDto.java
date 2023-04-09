@@ -14,6 +14,6 @@ public class TransferDto {
     private String phoneNumber;
     private String distPhoneNumber;
     private CurrencyEnum currency;
-    private BigDecimal ammount;
+    private BigDecimal amount;
 
 }

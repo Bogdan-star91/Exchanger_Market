@@ -24,7 +24,7 @@ public class Wallet {
 
     private Timestamp lastUpdate;
 
-    private BigDecimal ammount;
+    private BigDecimal amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

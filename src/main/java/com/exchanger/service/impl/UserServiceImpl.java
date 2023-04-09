@@ -50,14 +50,14 @@ public class UserServiceImpl implements UserService {
         Wallet uah = walletRepository.save(new Wallet()
                 .setUser(save)
                 .setCurrency(CurrencyEnum.UAH)
-                .setAmmount(BigDecimal.ZERO)
+                .setAmount(BigDecimal.ZERO)
                 .setLastUpdate(new Timestamp(System.currentTimeMillis())));
 
 
         Wallet usd = walletRepository.save(new Wallet()
                 .setUser(save)
                 .setCurrency(CurrencyEnum.USD)
-                .setAmmount(BigDecimal.ZERO)
+                .setAmount(BigDecimal.ZERO)
                 .setLastUpdate(new Timestamp(System.currentTimeMillis())));
 
         walletRepository.save(uah);

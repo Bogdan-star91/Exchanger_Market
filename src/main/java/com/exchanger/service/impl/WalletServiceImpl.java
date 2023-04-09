@@ -57,7 +57,7 @@ public class WalletServiceImpl implements WalletService {
         walletRepository.save(new Wallet()
                 .setUser(user)
                 .setCurrency(CurrencyEnum.valueOf(walletRequest.currencyISO()))
-                .setAmmount(BigDecimal.ZERO)
+                .setAmount(BigDecimal.ZERO)
                 .setLastUpdate(new Timestamp(System.currentTimeMillis())));
 
         return getUserWallets(walletRequest.phone());
@@ -71,7 +71,7 @@ public class WalletServiceImpl implements WalletService {
         String verificationCode = RandomStringUtils.randomAlphabetic(6);
         Transaction transaction = new Transaction()
                 .setReceiver(transferDto.getPhoneNumber())
-                .setAmount(transferDto.getAmmount())
+                .setAmount(transferDto.getAmount())
                 .setType(TransactionTypeEnum.PUT)
                 .setUpdateAt(LocalDate.now())
                 .setCurrency(transferDto.getCurrency())
@@ -87,7 +87,7 @@ public class WalletServiceImpl implements WalletService {
                 .setType(NotificationTypeEnum.PUT)
                 .setUser(user)
                 .setContent(String.format("User try put %s %s to wallet. Status pending",
-                        transferDto.getAmmount(),
+                        transferDto.getAmount(),
                         transferDto.getCurrency())));
 
         return transaction.getId();
@@ -102,7 +102,7 @@ public class WalletServiceImpl implements WalletService {
 
         if (transaction.getCode().equals(verificationDto.code())) {
             Wallet wallet = walletRepository.findByUserAndCurrency(user, transaction.getCurrency());
-            wallet.setAmmount(wallet.getAmmount().add(transaction.getAmount()));
+            wallet.setAmount(wallet.getAmount().add(transaction.getAmount()));
             walletRepository.save(wallet);
             transaction.setCode(null);
             transaction.setStatus(TransactionStatusEnum.EXECUTED);
@@ -122,13 +122,13 @@ public class WalletServiceImpl implements WalletService {
     public Long getMoney(TransferDto transferDto) {
         User user = userRepository.findByPhoneNumber(transferDto.getPhoneNumber());
         Wallet wallet = walletRepository.findByUserAndCurrency(user, transferDto.getCurrency());
-        if (wallet.getAmmount().compareTo(transferDto.getAmmount()) == -1)
+        if (wallet.getAmount().compareTo(transferDto.getAmount()) == -1)
             throw new NotEnoughtMoneyException();
 
         String verificationCode = RandomStringUtils.randomAlphabetic(6);
         Transaction transaction = new Transaction()
                 .setReceiver(transferDto.getPhoneNumber())
-                .setAmount(transferDto.getAmmount())
+                .setAmount(transferDto.getAmount())
                 .setType(TransactionTypeEnum.GET)
                 .setUpdateAt(LocalDate.now())
                 .setCurrency(transferDto.getCurrency())
@@ -144,7 +144,7 @@ public class WalletServiceImpl implements WalletService {
                 .setType(NotificationTypeEnum.GET)
                 .setUser(user)
                 .setContent(String.format("User try get %s %s from wallet. Status pending",
-                        transferDto.getAmmount(),
+                        transferDto.getAmount(),
                         transferDto.getCurrency())));
 
         return transaction.getId();
@@ -159,7 +159,7 @@ public class WalletServiceImpl implements WalletService {
 
         if (transaction.getCode().equals(verificationDto.code())) {
             Wallet wallet = walletRepository.findByUserAndCurrency(user, transaction.getCurrency());
-            wallet.setAmmount(wallet.getAmmount().subtract(transaction.getAmount()));
+            wallet.setAmount(wallet.getAmount().subtract(transaction.getAmount()));
             walletRepository.save(wallet);
             transaction.setCode(null);
             transaction.setStatus(TransactionStatusEnum.EXECUTED);
@@ -186,9 +186,9 @@ public class WalletServiceImpl implements WalletService {
 
 
         BigDecimal summ = exchangeDto.getCurrencyTo().equals(CurrencyEnum.UAH) ?
-                exchangeDto.getAmmount().divide(BigDecimal.valueOf(Double.parseDouble(rate.getBuy())), 2, RoundingMode.HALF_UP)
+                exchangeDto.getAmount().divide(BigDecimal.valueOf(Double.parseDouble(rate.getBuy())), 2, RoundingMode.HALF_UP)
                 :
-                exchangeDto.getAmmount().multiply(BigDecimal.valueOf(Double.parseDouble(rate.getSale())))
+                exchangeDto.getAmount().multiply(BigDecimal.valueOf(Double.parseDouble(rate.getSale())))
                 ;
 
         System.out.println(summ);
@@ -197,7 +197,7 @@ public class WalletServiceImpl implements WalletService {
                 .filter(w->w.getCurrency().equals(exchangeDto.getCurrencyFrom()))
                 .findFirst().orElseThrow(UserNotFoundException::new);
 
-        if (wFrom.getAmmount().compareTo(summ) == -1)
+        if (wFrom.getAmount().compareTo(summ) == -1)
             throw new NotEnoughtMoneyException();
 
         String verificationCode = RandomStringUtils.randomAlphabetic(6);
@@ -206,7 +206,7 @@ public class WalletServiceImpl implements WalletService {
                 .setReceiver(exchangeDto.getPhoneNumber())
                 .setAmount(summ)
                 .setCurrency(exchangeDto.getCurrencyFrom())
-                .setAmountTo(exchangeDto.getAmmount())
+                .setAmountTo(exchangeDto.getAmount())
                 .setCurrencyTo(exchangeDto.getCurrencyTo())
                 .setType(TransactionTypeEnum.EXCH)
                 .setUpdateAt(LocalDate.now())
@@ -232,8 +232,8 @@ public class WalletServiceImpl implements WalletService {
             Wallet walletFrom = walletRepository.findByUserAndCurrency(user, transaction.getCurrency());
             Wallet walletTo = walletRepository.findByUserAndCurrency(user, transaction.getCurrencyTo());
 
-            walletFrom.setAmmount(walletFrom.getAmmount().subtract(transaction.getAmount()));
-            walletTo.setAmmount(walletTo.getAmmount().add(transaction.getAmountTo()));
+            walletFrom.setAmount(walletFrom.getAmount().subtract(transaction.getAmount()));
+            walletTo.setAmount(walletTo.getAmount().add(transaction.getAmountTo()));
 
             walletRepository.save(walletFrom);
             walletRepository.save(walletTo);

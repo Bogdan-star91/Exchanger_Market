@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 u.last_name as lastName,
                 u.first_name as firstName,
                 u.phone as phoneNumber,
-                w.ammount,
+                w.amount,
                 w.currency
             from user u
             left join wallet w on u.id = w.user_id

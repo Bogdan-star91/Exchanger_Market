@@ -9,7 +9,7 @@ public interface UserView {
 
     String getPhoneNumber();
 
-    BigDecimal getAmmount();
+    BigDecimal getAmount();
 
     String getCurrency();
 }

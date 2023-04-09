@@ -14,6 +14,6 @@ public class ExchangeDto {
     private String phoneNumber;
     private CurrencyEnum currencyFrom; // UAH
     private CurrencyEnum currencyTo;   // USD
-    private BigDecimal ammount;
+    private BigDecimal amount;
 
 }
