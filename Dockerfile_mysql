@@ -1,5 +1,5 @@
 FROM mysql:latest
-MAINTAINER oStepurko
+MAINTAINER Bohdan Hrytsai
 EXPOSE 3306
 ENV MYSQL_DATABASE=exchangerMarket \
     MYSQL_ROOT_PASSWORD=Bd271991
